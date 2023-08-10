@@ -57,9 +57,10 @@ namespace ExtractExcel
 
             if (!File.Exists(JsonFile))
             {
-                errMsg = "File " + JsonFile + " không tôn tại \n. Thư mục hiện thời: " + Directory.GetCurrentDirectory() + "\n. Xem file demo.json để biết cấu trúc đầu vào";
+                errMsg = "File " + JsonFile + " không tôn tại";
                 json = "";
-
+                Console.WriteLine(errMsg);
+                return 1;
             }
             else
             {
@@ -69,18 +70,18 @@ namespace ExtractExcel
             ExcelTemplateFileName = Directory.GetCurrentDirectory() + "\\" + ExcelTemplateFileName;
             if (!File.Exists(ExcelTemplateFileName))
             {
-                errMsg = "File " + ExcelTemplateFileName + " không tôn tại \n. Thư mục hiện thời: " + Directory.GetCurrentDirectory() + "\n. Xem file demo.json để biết cấu trúc đầu vào";
+                errMsg = "File " + ExcelTemplateFileName + " không tôn tại ";
                 json = "";
+                Console.WriteLine(errMsg);
+                return 1;
 
             }
-
             ExtractExcel2(JsonFile, ExcelTemplateFileName);
             System.Diagnostics.Process prc = new System.Diagnostics.Process();
             prc.StartInfo.FileName = Directory.GetCurrentDirectory()+"\\"+JsonFile;
             prc.Start();
         _END_:
             Console.WriteLine("Version 2.0");
-            Console.ReadKey();
             return 0;
 
         }
@@ -170,8 +171,17 @@ namespace ExtractExcel
                         {
                             CellPosition cellPosition = new CellPosition(cellold.pos);
                             var value = Convert.ToString((range.Cells[cellPosition.RowIndex, cellPosition.ColumnIndex] as Excel.Range).Value2);
-                            CellType newcell = new CellType() { pos=cellold.pos, value=value };
-                            mySheetNew.cells.Add(newcell);
+                            try
+                            {
+                                var posname = ((range.Cells[cellPosition.RowIndex, cellPosition.ColumnIndex] as Excel.Range).Name).Name;
+                                CellType newcell = new CellType() { pos=cellold.pos, value=value, posName=posname };
+                                mySheetNew.cells.Add(newcell);
+                            }
+                            catch (Exception)
+                            {
+                                CellType newcell = new CellType() { pos=cellold.pos, value=value, posName=null };
+                                mySheetNew.cells.Add(newcell);
+                            }
                         }
                         newWorkbook.sheets.Add(mySheetNew);
                         checkSheetExit=true;

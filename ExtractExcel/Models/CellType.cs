@@ -14,6 +14,7 @@ namespace ExtractExcel.Models
     /// </summary>
     public class CellType
     {
+        public string posName { get; set; }
         public string pos { get; set; }
         public string value { get; set; }
     }
