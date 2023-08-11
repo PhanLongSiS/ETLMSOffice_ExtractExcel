@@ -169,17 +169,27 @@ namespace ExtractExcel
                         SheetType mySheetNew = new SheetType() { name=name };
                         foreach (var cellold in mysheetOld.cells)// Đọc gái trị các cell
                         {
-                            CellPosition cellPosition = new CellPosition(cellold.pos);
-                            var value = Convert.ToString((range.Cells[cellPosition.RowIndex, cellPosition.ColumnIndex] as Excel.Range).Value2);
-                            try
+                            if (!string.IsNullOrEmpty(cellold.pos))
                             {
-                                var posname = ((range.Cells[cellPosition.RowIndex, cellPosition.ColumnIndex] as Excel.Range).Name).Name;
-                                CellType newcell = new CellType() { pos=cellold.pos, value=value, posName=posname };
-                                mySheetNew.cells.Add(newcell);
+                                CellPosition cellPosition = new CellPosition(cellold.pos);
+                                var value = Convert.ToString((range.Cells[cellPosition.RowIndex, cellPosition.ColumnIndex] as Excel.Range).Value2);
+                                try
+                                {
+                                    var posname = ((range.Cells[cellPosition.RowIndex, cellPosition.ColumnIndex] as Excel.Range).Name).Name;
+                                    CellType newcell = new CellType() { pos=cellold.pos, value=value, posName=posname };
+                                    mySheetNew.cells.Add(newcell);
+                                }
+                                catch (Exception)
+                                {
+                                    CellType newcell = new CellType() { pos=cellold.pos, value=value, posName=null };
+                                    mySheetNew.cells.Add(newcell);
+                                }
                             }
-                            catch (Exception)
+                            else
                             {
-                                CellType newcell = new CellType() { pos=cellold.pos, value=value, posName=null };
+                                var cell = xlworkSheet.get_Range(cellold.posName, cellold.posName);
+                                var value = Convert.ToString((range.Cells[cell.Row, cell.Column] as Excel.Range).Value2);
+                                CellType newcell = new CellType() { pos="", value=value, posName=cellold.posName };
                                 mySheetNew.cells.Add(newcell);
                             }
                         }

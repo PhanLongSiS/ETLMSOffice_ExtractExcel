@@ -10,4 +10,3 @@ D:\DoAn\SMP_MSOfficeJson\ExtractExcel\obj\Debug\ExtractExcel.csproj.CoreCompileI
 D:\DoAn\SMP_MSOfficeJson\ExtractExcel\obj\Debug\ExtractExcel.csproj.CopyComplete
 D:\DoAn\SMP_MSOfficeJson\ExtractExcel\obj\Debug\ExtractExcel.exe
 D:\DoAn\SMP_MSOfficeJson\ExtractExcel\obj\Debug\ExtractExcel.pdb
-D:\DoAn\SMP_MSOfficeJson\ExtractExcel\obj\Debug\ExtractExcel.csproj.AssemblyReference.cache
